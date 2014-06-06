@@ -10,6 +10,7 @@ Myflix::Application.routes.draw do
   resources :categories
   resources :users
   resource :session
+  resources :reviews
 
   resources :videos, only: [:index,:show] do
     collection do

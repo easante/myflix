@@ -12,10 +12,21 @@ describe VideosController do
 
     it "assigns a new review to @review" do
       video = Fabricate(:video)
-      review = Fabricate(:review)
+      review = video.reviews.build
       session[:user_id] = Fabricate(:user).id
       get :show, id: video.id
-      expect(assigns(:review)).to eq review
+      expect(assigns(:review)).to be_instance_of(Review)
+    end
+
+    it "assigns the list of reviews to @reviews" do
+      video = Fabricate(:video)
+      review1 = Fabricate(:review)
+      review1.created_at = 1.day.ago
+      review2 = Fabricate(:review, stars: 5)
+
+      session[:user_id] = Fabricate(:user).id
+      get :show, id: video.id
+      expect(Review.count).to eq 2
     end
 
     it "renders the show template" do

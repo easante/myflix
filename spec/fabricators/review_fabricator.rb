@@ -1,6 +1,6 @@
 Fabricator(:review) do
-  video_id 1
-  user_id 1
-  stars 3
-  comment { Faker::Lorem.words(50).join(" ") }
+  video
+  user
+  stars { (1..5).to_a.sample }
+  comment { Faker::Lorem.paragraph(3) }
 end

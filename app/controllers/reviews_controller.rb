@@ -3,12 +3,16 @@ class ReviewsController < ApplicationController
 
   def create
     @review = Review.new(review_params)
+    @review.user_id = current_user.id
+#raise @review.inspect
+    @video = Video.find(params[:review][:video_id])
     if @review.save
       flash[:notice] = "Review has been created."
+      redirect_to @video
     else
       flash[:alert] = "Review has not been created."
+      render 'videos/show' 
     end
-    redirect_to video_path(:video_id)
   end
 
 private

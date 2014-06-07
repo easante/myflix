@@ -10,7 +10,11 @@ class Video < ActiveRecord::Base
   end
   
   def rating
-    stars = reviews.map { |r| r.stars }
-    stars.inject(:+).to_f / stars.size 
+    return 0 if reviews.size == 0
+    sum = 0.0
+    reviews.each do |r| 
+      sum += r.stars if r.stars
+    end
+    return sum / reviews.size
   end
 end

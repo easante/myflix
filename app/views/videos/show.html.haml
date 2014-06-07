@@ -6,7 +6,7 @@
       .video_info.col-sm-3
         %header
           %h3 Futurama
-          %span Rating: #{@video.rating} /5.0
+          %span Rating: #{sprintf('%.1f', @video.rating)} /5.0
         %p "#{@video.description}".
         .actions
           %a.btn.btn-primary(href="") Watch Now

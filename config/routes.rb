@@ -11,10 +11,10 @@ Myflix::Application.routes.draw do
   resources :categories
   resources :users, only: [:new, :create]
   resource :session, only: [:new, :destroy]
-  resources :queue_items #, only: [:index, :create, :destroy]
+  resources :queue_items, only: [:index, :create, :destroy]
 
   resources :videos, only: [:index,:show] do
-    resources :reviews
+    resources :reviews, only: [:create]
     collection do
       post :search, to: 'videos#search'
     end

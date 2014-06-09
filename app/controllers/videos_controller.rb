@@ -1,5 +1,5 @@
 class VideosController < ApplicationController
-  before_action :require_sign_in
+  before_action :require_sign_in, except: [:front]
 
   def index
     @categories = Category.order(:name)

@@ -13,9 +13,4 @@ describe User do
     expect(user.errors[:email].any?).to be_true
   end
 
-  it "requires a password" do
-    user = User.new(password: "")
-    expect(user).not_to be_valid
-    expect(user.errors[:password].any?).to be_true
-  end
 end

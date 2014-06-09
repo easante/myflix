@@ -10,15 +10,15 @@ describe ReviewsController do
       it "creates a review with valid inputs for authenticated users" do
         session[:user_id] = user.id
   
-        #post :create, stars: review.stars, comment: review.comment, user_id: review.user_id, video_id: review.user_id
-        post :create, review: {stars: 3, comment: "my comment", user_id: user.id, video_id: video.id}
+        post :create, review: Fabricate.attributes_for(:review), video_id: video.id
         expect(Review.count).to eq 1
       end
   
       it "fails to create a review with invalid inputs for authenticated users" do
         session[:user_id] = user.id
   
-        post :create, review: {stars: 3, comment: "", user_id: user.id, video_id: video.id}
+        #post :create, review: {stars: 3, comment: "", user_id: user.id, video_id: video.id}
+        post :create, review: Fabricate.attributes_for(:review, comment: ""), video_id: video.id
         expect(response).to render_template 'videos/show'
       end
 
@@ -26,7 +26,7 @@ describe ReviewsController do
         review = Fabricate(:review)
         session[:user_id] = user.id
   
-        post :create, review: {stars: 3, comment: "my comments", user_id: user.id, video_id: video.id}
+        post :create, review: Fabricate.attributes_for(:review), video_id: video.id
         expect(response).to redirect_to video_path(video.id)
       end
     end

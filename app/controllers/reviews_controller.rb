@@ -1,11 +1,9 @@
 class ReviewsController < ApplicationController
   before_action :require_sign_in
+  before_action :set_video
 
   def create
-    @review = Review.new(review_params)
-    @review.user_id = current_user.id
-#raise @review.inspect
-    @video = Video.find(params[:review][:video_id])
+    @review = @video.reviews.build(review_params.merge!(user: current_user))
     if @review.save
       flash[:notice] = "Review has been created."
       redirect_to @video
@@ -20,4 +18,7 @@ private
     params.require(:review).permit(:stars, :comment, :user_id, :video_id)
   end
 
+  def set_video
+    @video = Video.find(params[:video_id])
+  end
 end

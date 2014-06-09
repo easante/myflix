@@ -3,4 +3,8 @@ module ApplicationHelper
     user = User.find_by(id: review.user_id)
     user ? user.full_name : "None"
   end
+
+  def ratings_values
+    Review::STARS.map { |s| ["#{pluralize(s, 'Star')}", s] }
+  end
 end

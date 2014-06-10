@@ -6,7 +6,18 @@ class QueueItem < ActiveRecord::Base
   delegate :title, to: :video, prefix: :video
 
   validates :video_id, :user_id, presence: true
-  validates :position, presence: true
+  #validates :position, presence: true
+  validates :position, numericality: { only_integer: true }
+
+  def self.re_order(items)
+    pos_array = []
+    items.each do |queue_item|
+      pos_array << [queue_item[:position], queue_item[:id]]
+    end
+    pos_array.sort!
+  end
+
+default_scope { order(:position) } 
 
 #  def video_title
 #    video.title

@@ -3,17 +3,15 @@ require 'spec_helper'
 describe QueueItemsController do
 
   describe "GET index" do
-#    it "assigns the current user's new queue_item records to @queue_items" do
-#      user = Fabricate(:user)
-#      session[:user_id] = user.id
-#      item1 = Fabricate(:queue_item, position: 1)
-#      item2 = Fabricate(:queue_item, position: 2)
-#
-#      get :index
-#      #expect(assigns(:queue_items)).to include item1
-#      #expect(assigns(:queue_items)).to eq([item1, item2])
-#      expect(assigns(:queue_items)).to match_array([item1, item2])
-#    end
+    it "assigns the current user's new queue_item records to @queue_items" do
+      user = Fabricate(:user)
+      session[:user_id] = user.id
+      item1 = Fabricate(:queue_item, position: 1, user: user)
+      item2 = Fabricate(:queue_item, position: 2, user: user)
+
+      get :index
+      expect(assigns(:queue_items)).to match_array([item1, item2])
+    end
 
     it "renders the index template" do
       user = Fabricate(:user)
@@ -88,6 +86,49 @@ describe QueueItemsController do
 
       delete :destroy, id: queue_item.id
       expect(QueueItem.count).to eq(count)
+    end
+  end
+
+  describe "PUT update" do
+    context "unauthenticated users" do
+      it "should redirect to the sign_in page" do
+        put :update
+        expect(response).to redirect_to new_session_path
+      end 
+    end 
+    context "authenticated users" do
+      it "should reject non-integer position values" do
+        user = Fabricate(:user)
+        video = Fabricate(:video)
+        session[:user_id] = user.id
+        queue_item1 = Fabricate(:queue_item, video: video, user: user, position: 1)
+        queue_item2 = Fabricate(:queue_item, video: video, user: user, position: 2)
+
+        put :update, queue_items: [ {position: 2.5, id: queue_item1.id}, {position:1, id: queue_item2.id} ]
+        expect(response).to redirect_to queue_items_path
+      end 
+
+      it "should re-order the list in increasing order by position starting from 1" do
+        user = Fabricate(:user)
+        video = Fabricate(:video)
+        session[:user_id] = user.id
+        queue_item1 = Fabricate(:queue_item, video: video, user: user, position: 1)
+        queue_item2 = Fabricate(:queue_item, video: video, user: user, position: 2)
+
+        put :update, queue_items: [ {position: 2, id: queue_item1.id}, {position:1, id: queue_item2.id} ]
+        expect(response).to redirect_to queue_items_path
+      end 
+
+      it "should redirect to the index page upon successful update" do
+        user = Fabricate(:user)
+        video = Fabricate(:video)
+        session[:user_id] = user.id
+        queue_item1 = Fabricate(:queue_item, video: video, user: user, position: 1)
+        queue_item2 = Fabricate(:queue_item, video: video, user: user, position: 2)
+
+        put :update, queue_items: [{position: 2, id: queue_item1.id}, {position:1, id: queue_item2.id} ]
+        expect(response).to redirect_to queue_items_path
+      end
     end
   end
 

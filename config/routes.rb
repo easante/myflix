@@ -7,6 +7,7 @@ Myflix::Application.routes.draw do
   get '/sign_in', to: 'sessions#new', as: 'sign_in'
   post '/sign_in', to: 'sessions#create'
   get "/my_queue", to: "queue_items#index"
+  put "/update_user_queue", to: "queue_items#update", as: :update_user_queue
 
   resources :categories
   resources :users, only: [:new, :create]

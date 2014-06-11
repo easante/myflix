@@ -11,6 +11,7 @@ class QueueItemsController < ApplicationController
       position = current_user.queue_items.count + 1
       @queue_items = QueueItem.new(queue_item_params.merge!(user: current_user, position: position))
       @queue_items.save
+      current_user.normalize_positions
     end
     redirect_to queue_items_path
   end
@@ -20,7 +21,7 @@ class QueueItemsController < ApplicationController
     ActiveRecord::Base.transaction do
       ordered_queue.each_with_index do |row|
         queue_item = QueueItem.find(row[1])
-        unless queue_item.update(queue_item_params.merge!(user: current_user, position: row[0]))
+        unless queue_item.update(queue_item_params.merge!(user: current_user, position: row[0], star_rating: row[2]))
           flash[:alert] = "Position has to be an integer number."
           redirect_to queue_items_path
           return
@@ -34,11 +35,12 @@ class QueueItemsController < ApplicationController
   def destroy
     queue_item = QueueItem.find(params[:id])
     queue_item.destroy
+    current_user.normalize_positions
     redirect_to queue_items_path
   end
 
 private
   def queue_item_params
-    params.permit(:video_id, :user_id, :position)
+    params.permit(:video_id, :user_id, :position, :stars)
   end
 end

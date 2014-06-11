@@ -96,6 +96,7 @@ describe QueueItemsController do
         expect(response).to redirect_to new_session_path
       end 
     end 
+
     context "authenticated users" do
       it "should reject non-integer position values" do
         user = Fabricate(:user)
@@ -129,6 +130,29 @@ describe QueueItemsController do
         put :update, queue_items: [{position: 2, id: queue_item1.id}, {position:1, id: queue_item2.id} ]
         expect(response).to redirect_to queue_items_path
       end
+
+      context "updating the star rating" do
+        it "should update the star rating in the database when changed in view" do
+          user = Fabricate(:user)
+          video = Fabricate(:video)
+          session[:user_id] = user.id
+          queue_item = Fabricate(:queue_item, video: video, user: user, position: 1)
+  
+          put :update, queue_items: [{position: 1, id: queue_item.id, stars: 4} ]
+          expect(queue_item.star_rating).to eq(4)
+        end
+
+        it "should save the star rating if there is no rating associated with video" do
+          user = Fabricate(:user)
+          video = Fabricate(:video)
+          session[:user_id] = user.id
+          queue_item = Fabricate(:queue_item, video: video, user: user, position: 1)
+  
+          put :update, queue_items: [{position: 1, id: queue_item.id, stars: 4} ]
+          expect(queue_item.star_rating).to eq(4)
+        end
+      end
+
     end
   end
 

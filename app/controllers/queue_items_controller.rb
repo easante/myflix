@@ -17,18 +17,20 @@ class QueueItemsController < ApplicationController
   end
 
   def update
-    ordered_queue = QueueItem.re_order(params[:queue_items])
-    ActiveRecord::Base.transaction do
-      ordered_queue.each_with_index do |row|
-        queue_item = QueueItem.find(row[1])
-        unless queue_item.update(queue_item_params.merge!(user: current_user, position: row[0], star_rating: row[2]))
-          flash[:alert] = "Position has to be an integer number."
-          redirect_to queue_items_path
-          return
+    begin
+      ordered_queue = QueueItem.re_order(params[:queue_items])
+      ActiveRecord::Base.transaction do
+        ordered_queue.each_with_index do |row|
+          queue_item = QueueItem.find(row[1])
+          queue_item.update!(queue_item_params.merge!(user: current_user, position: row[0], star_rating: row[2]))
         end
       end
-      current_user.normalize_positions
+    rescue ActiveRecord::RecordInvalid
+      flash[:alert] = "Position has to be an integer number."
+      redirect_to queue_items_path
+      return
     end
+    current_user.normalize_positions
     redirect_to queue_items_path
   end
 

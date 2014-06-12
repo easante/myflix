@@ -7,4 +7,8 @@ module ApplicationHelper
   def ratings_values
     Review::STARS.map { |s| ["#{pluralize(s, 'Star')}", s] }
   end
+
+  def queue_includes?(video)
+    current_user.queue_items.map(&:video).include?(video)
+  end
 end

@@ -19,7 +19,7 @@
               - @queue_items.each do |queue_item|
                 %tr
                   %td
-                    = f.text_field "queue_items[][position]", hide_label: true, value: queue_item.position, class:'form-control'
+                    = f.text_field "queue_items[][position]", hide_label: true, value: queue_item.position, data: {video_id: queue_item.video.id }, class:'form-control'
                     = f.hidden_field "queue_items[][id]", value: queue_item.id, class:'form-control'
                   %td
                     = link_to queue_item.video_title, video_path(queue_item.video)

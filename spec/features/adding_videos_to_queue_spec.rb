@@ -36,7 +36,7 @@ feature 'Adding videos to the queue' do
     click_link "+ My Queue"
 
     click_link 'My Queue'
-    print page.body
+    #print page.body
     expect(find("input[data-video-id='1']").value).to eq('1')
     expect(find("input[data-video-id='2']").value).to eq('2')
 

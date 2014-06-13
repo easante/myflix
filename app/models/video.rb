@@ -10,6 +10,7 @@ class Video < ActiveRecord::Base
   end
   
   def rating
+    #reviews.average(:stars).round(1) if reviews.average(:stars)
     return 0 if reviews.size == 0
     sum = 0.0
     reviews.each do |r| 

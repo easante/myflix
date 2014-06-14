@@ -14,6 +14,20 @@ describe UsersController do
     end
   end
 
+  describe "GET show" do
+    it "displays a user profile" do
+      john = Fabricate(:user)
+      get :show, id: john.id 
+      expect(assigns(:user)).to eq(john)
+    end
+
+    it "displays a user profile" do
+      john = Fabricate(:user)
+      get :show, id: john.id 
+      expect(response).to render_template :show
+    end
+  end
+
   describe "POST create" do
     it "creates a user record for valid inputs" do
       post :create, user: { full_name: 'Juliet Asiedu', email: 'juliet@example.com', password: 'password' } 

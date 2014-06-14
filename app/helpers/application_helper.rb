@@ -11,4 +11,16 @@ module ApplicationHelper
   def queue_includes?(video)
     current_user.queue_items.map(&:video).include?(video)
   end
+
+  def queue_count(user)
+    user.queue_items.count
+  end
+
+  def queue_video(queue_item)
+    queue_item.video.title
+  end
+
+  def queue_category(queue_item)
+    queue_item.video.category.name if queue_item
+  end
 end

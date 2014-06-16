@@ -9,10 +9,12 @@ Myflix::Application.routes.draw do
   get "/my_queue", to: "queue_items#index"
   put "/update_user_queue", to: "queue_items#update", as: :update_user_queue
 
-  resources :categories
-  resources :users, only: [:new, :show, :create]
+  resources :categories 
+  resources :users, only: [:new, :show, :create] 
+  resources :friendships, only: [:create, :destroy]
   resource :session, only: [:new, :destroy]
   resources :queue_items, only: [:index, :create, :destroy]
+  resources :people, only: [:index]
 
   resources :videos, only: [:index,:show] do
     resources :reviews, only: [:create]

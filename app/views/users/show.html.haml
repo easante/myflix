@@ -3,9 +3,9 @@
     .col-sm-10.col-sm-offset-1
       %article
         %header
-          %img(src="http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest('knwang@gmail.com'.downcase)}?s=40")
+          %img(src="http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest('@user.email'.downcase)}?s=40")
           %h2 #{@user.full_name}'s video collections (#{queue_count(@user)})
-          %button.btn.btn-default Follow
+          =link_to "Follow", friendships_path(friend_id: @user.id), method: :post, class: "btn btn-default"
         %table.table
           %thead
             %tr

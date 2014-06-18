@@ -11,23 +11,28 @@ describe FriendshipsController do
       let(:mary) { Fabricate(:user) }
 
       it "creates friendship with valid inputs for authenticated users" do
-        post :create, { friend_id: jack.id, user_id: current_user.id }
+        post :create, Fabricate.attributes_for(:friendship, user_id: current_user.id, friend_id: jack.id)
+        expect(current_user.friendships.first.friend).to eq(jack)
+      end
+
+      it "fails to create friendship if already a friend of authenticated user" do
+        friendship = Fabricate(:friendship, user_id: current_user.id, friend_id: jack.id)
+
+        post :create, Fabricate.attributes_for(:friendship, user_id: current_user.id, friend_id: jack.id)
         expect(Friendship.count).to eq(1)
       end
 
-      it "fails to create friendship if already a friend for authenticated users" do
-        friend = Fabricate(:friendship, user_id: current_user.id, friend_id: jack.id)
+      it "redirects to the people page" do
 
-        post :create, Fabricate.attributes_for(:friendship, user_id: current_user.id, friend_id: jack.id)
-        expect(response).to redirect_to user_path(jack.id)
+        post :create, Fabricate.attributes_for(:friendship, user_id: current_user.id, friend_id: mary.id)
+        expect(response).to redirect_to people_path
       end
 
-      it "redirects to the people show page" do
-        friendship = Fabricate(:friendship, friend_id: jack.id, user_id: current_user.id)
+      it "does not create association with itself" do
+        friendship = Fabricate(:friendship, user_id: current_user.id, friend_id: jack.id)
 
-        #post :create, { friend_id: mary.id, user_id: current_user.id}
-        post :create, Fabricate.attributes_for(:friendship, user_id: current_user.id, friend_id: jack.id)
-        expect(response).to redirect_to people_path
+        post :create, Fabricate.attributes_for(:friendship, user_id: current_user.id, friend_id: current_user.id)
+        expect(Friendship.count).to eq(1)
       end
     end
 

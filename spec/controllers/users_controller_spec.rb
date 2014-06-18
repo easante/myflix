@@ -43,6 +43,23 @@ describe UsersController do
       post :create, user: { email: 'juliet@example.com', password: 'password' } 
       expect(response).to render_template :new
     end
+
+    context "sending email" do
+      it "sends out email" do
+        post :create, user: { "email"=>"connie@example.com", "password"=>"password", "full_name"=>"Comfort Ohenebeng" }
+        expect(ActionMailer::Base.deliveries).not_to be_empty
+      end
+
+      it "sends out email to the right receipient" do
+        post :create, user: { "email"=>"connie@example.com", "password"=>"password", "full_name"=>"Comfort Ohenebeng" }
+        expect(ActionMailer::Base.deliveries.last.to).to eq(["connie@example.com"])
+      end
+
+      it "sends out the right email body" do
+        post :create, user: { "email"=>"connie@example.com", "password"=>"password", "full_name"=>"Comfort Ohenebeng" }
+        expect(ActionMailer::Base.deliveries.last.body).to include("Thank you for signing up")
+      end
+    end
   end
 
 end

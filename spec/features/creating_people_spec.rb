@@ -23,7 +23,12 @@ feature 'Creating people page' do
     click_link mary.full_name
  
     expect(current_url).to eq(user_url(mary.id))
+    expect(page).not_to have_content('Follow')
  
+
+    click_link "Videos"
+    find("a[href='/videos/#{video2.id}']").click
+    click_link dan.full_name
     click_link "Follow"
     expect(current_url).to eq(people_url)
     expect(page).to have_content('People I Follow')
@@ -35,5 +40,8 @@ feature 'Creating people page' do
     expect(page).to have_content(mary.queue_items.count)
     expect(page).to have_content(mary.inverse_friends.count)
     expect(page).to have_css("a[href='/friendships/#{friendship.id}']")
+
+    visit user_path(mary)
+    expect(page).not_to have_link("Follow")
   end 
 end 

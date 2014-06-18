@@ -2,14 +2,10 @@ class FriendshipsController < ApplicationController
   before_action :require_sign_in
 
   def create
-    @friendship = current_user.friendships.build(friendship_params.merge!(friend_id: params[:friend_id]))
     friend = User.find(params[:friend_id])
-    if !current_user.follows_or_same?(friend) && @friendship.save 
-      redirect_to people_path
-    else
-      flash[:alert] = "Something went wrong and could not follow user"
-      redirect_to user_path(params[:friend_id])
-    end
+    Friendship.create(friendship_params.merge!(friend_id: params[:friend_id], 
+                      user_id: current_user.id)) unless current_user.follows_or_same?(friend) 
+    redirect_to people_path
   end
 
   def destroy

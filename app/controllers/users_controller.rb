@@ -10,6 +10,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
+      WelcomeMailer.notify_on_sign_up(@user).deliver
       flash[:notice] = "You have signed up successfully."
       redirect_to sign_in_path
     else

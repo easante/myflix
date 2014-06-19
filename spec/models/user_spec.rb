@@ -1,6 +1,13 @@
 require 'spec_helper'
 
 describe User do
+  it { should have_many(:queue_items) }
+  it { should have_many(:reviews) }
+  it { should have_many(:friendships) }
+  it { should have_many(:friends).through(:friendships) }
+  it { should have_many(:inverse_friendships).class_name('Friendship').with_foreign_key('friend_id') }
+  it { should have_many(:inverse_friends).through(:inverse_friendships).source(:user) }
+
   it "requires a fullname" do
     user = User.new(full_name: "")
     expect(user).not_to be_valid
@@ -29,6 +36,11 @@ describe User do
 
       follower = Fabricate(:friendship, user_id: john.id, friend_id: john.id)
       expect(john.follows_or_same?(john)).to be_true
+    end
+
+    it "generates a random token when a user is created" do
+      john = Fabricate(:user)
+      expect(john.token).to be_present
     end
   end
 end

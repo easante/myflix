@@ -6,4 +6,12 @@ class WelcomeMailer < ActionMailer::Base
            to: user.email,
       subject: 'MyFlix Sign up'
   end
+
+  def send_password_link(user)
+    @user = user
+
+    mail from: 'Emmanuel Asante <esante2011@gmail.com>',
+           to: user.email,
+      subject: 'Reset Password'
+  end
 end

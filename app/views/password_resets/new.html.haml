@@ -1,0 +1,11 @@
+%section.reset_password.container
+  .row
+    .col-sm-10.col-sm-offset-1
+      = bootstrap_form_tag url: password_resets_path, html: { class:'sign_in' } do |f|
+        %header
+          %h1 Forgotten Your Password?
+          %p Enter your email address for a link to be sent to you to reset your password.
+        %fieldset.form-group
+          = f.email_field :email, label: "Email Address"
+        %fieldset.form-group.action
+          %input(type="submit" value="Reset Password" class="btn btn-default")

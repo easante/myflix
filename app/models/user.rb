@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
   has_many :inverse_friends, through: :inverse_friendships, source: :user
 
   has_secure_password validations: false
+  
+  before_create :generate_token
 
   validates :full_name, presence: true  
   validates :email, presence: true  
@@ -25,5 +27,9 @@ class User < ActiveRecord::Base
       queue_items.each_with_index do |queue_item, index|
         queue_item.update(position: index + 1)
       end
+  end
+
+  def generate_token
+    self.token = SecureRandom.urlsafe_base64
   end
 end

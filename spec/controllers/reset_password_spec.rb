@@ -59,28 +59,28 @@ describe PasswordResetsController do
       it "updates the user's password" do
         mary = Fabricate(:user, password: 'password')
         mary.update_column(:token, '12345')
-        put :update, id: '12345', password: 'password2'
+        put :update, id: '12345', user: { password: 'password2' }
         expect(mary.reload.authenticate('password2')).to be_true
       end
 
       it "redirects to the sign in page" do
         mary = Fabricate(:user, password: 'password')
         mary.update_column(:token, '12345')
-        put :update, id: '12345', password: 'password2'
+        put :update, id: '12345', user: { password: 'password2' }
         expect(response).to redirect_to sign_in_path
       end
 
       it "sets the flash message" do
         mary = Fabricate(:user, password: 'password')
         mary.update_column(:token, '12345')
-        put :update, id: '12345', password: 'password2'
+        put :update, id: '12345', user: { password: 'password2' }
         expect(flash[:notice]).to eq("Password has been changed.")
       end
 
       it "regenerates the user token" do
         mary = Fabricate(:user, password: 'password')
         mary.update_column(:token, '12345')
-        put :update, id: '12345', password: 'password2'
+        put :update, id: '12345', user: { password: 'password2' }
         expect(mary.reload.token).not_to eq("12345")
       end
     end

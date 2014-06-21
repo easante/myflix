@@ -1,0 +1,15 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <p>Dear <%= @invitation.full_name %>,</p>
+    <p><%= @invitation.message %>.</p>
+    <br>
+    <p>Please click the link below to reset your password.</p>
+    <p><%=link_to "Register to use the service", register_url(invitation_id: @invitation.token)%></p>
+    <br>
+    Regards,
+    <br>
+    <%= @invitation.inviter.full_name %>
+  </body>
+</html>

@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   def new
     @user = User.new
+    @invitation = Invitation.find_by(token: params[:invitation_id]) if params[:invitation_id]
+    @user.email = @invitation.email if @invitation
   end
 
   def show
@@ -9,7 +11,24 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
+
+    if params[:user][:invitation_id]
+      @invitation = Invitation.find_by(token: params[:user][:invitation_id]) 
+      if @invitation.nil?
+        flash[:notice] = "Invalid token."
+        redirect_to register_path 
+        return
+      end
+    end
+
     if @user.save
+      if @invitation
+        @user.follow(@invitation.inviter)
+        @invitation.inviter.follow(@user)
+        #create_friendship(@invitation, @user)
+        @invitation.token = nil
+        @invitation.save
+      end
       WelcomeMailer.notify_on_sign_up(@user).deliver
       flash[:notice] = "You have signed up successfully."
       redirect_to sign_in_path
@@ -22,5 +41,10 @@ class UsersController < ApplicationController
 private
   def user_params
     params.require(:user).permit(:email, :password, :full_name) 
+  end
+
+  def create_friendship(invitation, user) 
+    Friendship.create(user_id: invitation.inviter_id, friend_id: user.id)
+    Friendship.create(user_id: user.id, friend_id: invitation.inviter_id)
   end
 end

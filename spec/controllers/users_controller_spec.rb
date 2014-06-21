@@ -3,9 +3,26 @@ require 'spec_helper'
 describe UsersController do
 
   describe "GET new" do
+    before do
+      set_current_user
+    end
+
     it "assigns a new user to @user" do
       get :new
       expect(assigns(:user)).to be_a_new(User)
+    end
+
+    it "assigns a new invitation to @invitation" do
+      invitation = Invitation.create(full_name: "John", email: "john@example.com", message: "message")
+      get :new
+      expect(Invitation.count).to eq(1)
+    end
+
+    it "sets the password to invitees password if invitation exists" do
+      invitation = Invitation.create(full_name: "John", email: "john@example.com", message: "message")
+      user = Fabricate(:user, email: invitation.email)
+      get :new
+      expect(user.email).to eq('john@example.com')
     end
 
     it "renders the new template" do
@@ -60,6 +77,17 @@ describe UsersController do
         expect(ActionMailer::Base.deliveries.last.body).to include("Thank you for signing up")
       end
     end
+
+#    context "creating a user from invitation" do
+#      it "creates friendships from valid invitation token" do
+#        john = Fabricate(:user)
+#        invitation = Fabricate(:invitation, inviter_id: john.id, email: "mike@example.com", full_name: "Mike", message: "Message")
+#        post :create, user: { email: invitation.email, password: "password", full_name: invitation.full_name, invitation_id: invitation.id }
+#        mike = User.find_by(email: "mike@example.com")
+#        expect(mike.follows_or_same?(john)).to be_true
+#        #expect(john.follows_or_same?(mike)).to be_true
+#      end
+#    end
   end
 
 end

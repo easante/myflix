@@ -13,6 +13,7 @@ gem 'bcrypt-ruby'
 gem 'bootstrap_form'
 gem 'fabrication'
 gem 'faker'
+gem 'mailgunner', '~> 1.3.0'
 
 group :development do
   gem 'sqlite3'
@@ -37,5 +38,6 @@ group :test do
   gem 'shoulda-matchers'
   gem 'capybara'
   gem 'database_cleaner'
+  gem 'capybara-email', github: 'dockyard/capybara-email'
 end
 

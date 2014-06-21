@@ -23,7 +23,7 @@ class PasswordResetsController < ApplicationController
   def update
     @user = User.find_by(token: params[:id])
     if @user
-      @user.password = params[:password]
+      @user.password = params[:user][:password]
       @user.generate_token
       @user.save
       flash[:notice] = "Password has been changed."

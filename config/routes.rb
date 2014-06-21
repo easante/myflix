@@ -10,6 +10,7 @@ Myflix::Application.routes.draw do
   put "/update_user_queue", to: "queue_items#update", as: :update_user_queue
   get "/reset_password", to: "password_resets#new"
   get "/expired_token", to: "password_resets#expired_token"
+  get "/invite_friend", to: "invitations#new"
 
   resources :categories 
   resources :users, only: [:new, :show, :create] 
@@ -18,6 +19,7 @@ Myflix::Application.routes.draw do
   resources :queue_items, only: [:index, :create, :destroy]
   resources :people, only: [:index]
   resources :password_resets, only: [:create, :edit, :update]
+  resources :invitations , only: [:create]
 
   resources :videos, only: [:index,:show] do
     resources :reviews, only: [:create]

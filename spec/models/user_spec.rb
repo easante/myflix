@@ -7,6 +7,7 @@ describe User do
   it { should have_many(:friends).through(:friendships) }
   it { should have_many(:inverse_friendships).class_name('Friendship').with_foreign_key('friend_id') }
   it { should have_many(:inverse_friends).through(:inverse_friendships).source(:user) }
+  it { should have_many(:invitations) }
 
   it "requires a fullname" do
     user = User.new(full_name: "")

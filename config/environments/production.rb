@@ -18,7 +18,7 @@ Myflix::Application.configure do
 
   config.active_support.deprecation = :notify
 
-  config.action_mailer.default_url_options = { :host => "shielded-dawn-5656.herokuapp.com" }
+  config.action_mailer.default_url_options = { :host => "shielded-dawn-5656.herokuapp.com", :protocol => "https" }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
@@ -26,7 +26,7 @@ Myflix::Application.configure do
   config.action_mailer.smtp_settings = {
     address:              ENV['MAILGUN_SMTP_SERVER'],
     port:                 ENV['MAILGUN_SMTP_PORT'],
-    domain:               'shielded-dawn-5656.heroku.com',
+    domain:               'heroku.com',
     user_name:            ENV['MAILGUN_SMTP_LOGIN'],
     password:             ENV['MAILGUN_SMTP_PASSWORD'],
     authentication:       'plain',

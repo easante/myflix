@@ -220,6 +220,7 @@ DEPENDENCIES
   pry-nav
   rails
   rails_12factor
+  redis
   rspec-rails (= 2.14.1)
   sass-rails
   shoulda-matchers

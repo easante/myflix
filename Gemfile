@@ -13,6 +13,7 @@ gem 'bcrypt-ruby'
 gem 'bootstrap_form'
 gem 'fabrication'
 gem 'faker'
+gem 'redis'
 gem 'sidekiq'
 gem 'mailgunner', '~> 1.3.0'
 

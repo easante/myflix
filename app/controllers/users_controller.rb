@@ -25,11 +25,10 @@ class UsersController < ApplicationController
       if @invitation
         @user.follow(@invitation.inviter)
         @invitation.inviter.follow(@user)
-        #create_friendship(@invitation, @user)
         @invitation.token = nil
         @invitation.save
       end
-      WelcomeMailer.notify_on_sign_up(@user).deliver
+      WelcomeMailer.delay.notify_on_sign_up(@user)
       flash[:notice] = "You have signed up successfully."
       redirect_to sign_in_path
     else
@@ -41,10 +40,5 @@ class UsersController < ApplicationController
 private
   def user_params
     params.require(:user).permit(:email, :password, :full_name) 
-  end
-
-  def create_friendship(invitation, user) 
-    Friendship.create(user_id: invitation.inviter_id, friend_id: user.id)
-    Friendship.create(user_id: user.id, friend_id: invitation.inviter_id)
   end
 end

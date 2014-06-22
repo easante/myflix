@@ -5,7 +5,7 @@ class PasswordResetsController < ApplicationController
   def create
     user = User.find_by(email: params[:email])
     if user
-      WelcomeMailer.send_password_link(user).deliver
+      WelcomeMailer.delay.send_password_link(user)
       render :confirm_password_reset
       false
     else

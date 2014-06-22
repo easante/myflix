@@ -10,7 +10,6 @@ class WelcomeMailer < ActionMailer::Base
   def send_password_link(user)
     @user = user
 
-    #mail from: 'Emmanuel Asante <esante2011@gmail.com>',
     mail from: 'esante2011@gmail.com',
            to: user.email,
       subject: 'Reset Password'

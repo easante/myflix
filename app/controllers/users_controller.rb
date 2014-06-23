@@ -12,7 +12,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    if params[:user][:invitation_id]
+    unless params[:user][:invitation_id].nil?
       @invitation = Invitation.find_by(token: params[:user][:invitation_id]) 
       if @invitation.nil?
         flash[:notice] = "Invalid token."
@@ -28,6 +28,7 @@ class UsersController < ApplicationController
         @invitation.token = nil
         @invitation.save
       end
+      #MailWorker.perform_async(@user.id)
       WelcomeMailer.delay.notify_on_sign_up(@user)
       flash[:notice] = "You have signed up successfully."
       redirect_to sign_in_path

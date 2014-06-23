@@ -17,6 +17,7 @@ gem 'redis'
 gem 'sidekiq'
 gem 'unicorn'
 gem 'mailgunner', '~> 1.3.0'
+gem 'sentry-raven'
 
 group :development do
   gem 'sqlite3'

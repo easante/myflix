@@ -28,8 +28,8 @@ class UsersController < ApplicationController
         @invitation.token = nil
         @invitation.save
       end
-      #MailWorker.perform_async(@user.id)
-      WelcomeMailer.delay.notify_on_sign_up(@user)
+      MailWorker.perform_async(@user.id)
+      #WelcomeMailer.delay.notify_on_sign_up(@user)
       flash[:notice] = "You have signed up successfully."
       redirect_to sign_in_path
     else

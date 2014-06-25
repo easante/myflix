@@ -29,7 +29,7 @@ describe QueueItemsController do
         clear_current_user
 
         get :index
-        expect(response).to redirect_to new_session_path
+        expect(response).to redirect_to sign_in_path
       end
     end
   end
@@ -75,7 +75,7 @@ describe QueueItemsController do
         video = Fabricate(:video)
   
         post :create, video_id: video.id
-        expect(response).to redirect_to new_session_path
+        expect(response).to redirect_to sign_in_path
       end
     end
   end
@@ -97,7 +97,7 @@ describe QueueItemsController do
         clear_current_user
 
         put :update
-        expect(response).to redirect_to new_session_path
+        expect(response).to redirect_to sign_in_path
       end 
     end 
 

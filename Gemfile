@@ -18,6 +18,10 @@ gem 'sidekiq'
 gem 'unicorn'
 gem 'mailgunner', '~> 1.3.0'
 gem 'sentry-raven'
+gem 'paratrooper'
+gem 'carrierwave'
+gem 'fog'
+gem 'mini_magick'
 
 group :development do
   gem 'sqlite3'

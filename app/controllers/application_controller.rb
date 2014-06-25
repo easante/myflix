@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
   def require_sign_in
     unless current_user
-      redirect_to new_session_path, alert: "Please sign in first!"
+      redirect_to sign_in_path, alert: "Please sign in first!"
     end
   end
 
@@ -18,4 +18,11 @@ class ApplicationController < ActionController::Base
   end
 
   helper_method :current_user?
+
+  def require_admin
+    unless current_user.admin?
+      flash[:alert] = "You have to be an admin to do that."
+      redirect_to home_path 
+    end
+  end
 end

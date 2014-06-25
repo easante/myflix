@@ -25,7 +25,7 @@ describe InvitationsController do
         clear_current_user
 
         post :create, invitation: { full_name: "John", email: "mike@example.com", message: "My test message", token:"" }
-        expect(response).to redirect_to new_session_path
+        expect(response).to redirect_to sign_in_path
       end
 
       it "displays error message" do

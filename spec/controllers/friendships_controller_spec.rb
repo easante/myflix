@@ -43,7 +43,7 @@ describe FriendshipsController do
         clear_current_user
 
         post :create, friendship: { friend_id: jack.id }
-        expect(response).to redirect_to new_session_path
+        expect(response).to redirect_to sign_in_path
       end
     end
   end

@@ -5,12 +5,15 @@ class Video < ActiveRecord::Base
   validates :title, presence: true
   validates :description, presence: true
 
+  mount_uploader :large_cover, LargeCoverUploader
+  mount_uploader :small_cover, SmallCoverUploader
+
   def self.search_by_title(title)
     where('title LIKE ?', "%#{title}%").order(:title)
   end
   
   def rating
-    #reviews.average(:stars).round(1) if reviews.average(:stars)
+    #reviews.average(:stars).round(1) unless reviews.average(:stars).nil? 
     return 0 if reviews.size == 0
     sum = 0.0
     reviews.each do |r| 

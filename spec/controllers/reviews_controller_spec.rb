@@ -36,7 +36,7 @@ describe ReviewsController do
         review = Fabricate(:review, video: video, user: user)
   
         post :create, stars: review.stars, comment: review.comment, user_id: review.user_id, video_id: review.user_id
-        expect(response).to redirect_to new_session_path
+        expect(response).to redirect_to sign_in_path
       end
     end
   end

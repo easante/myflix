@@ -8,7 +8,7 @@ class Admin::VideosController < Admin::BaseController
   def create
     @video = Video.new(video_params)
     if @video.save
-      flash[:message] = "Video has been created."
+      flash[:notice] = "Video has been created."
       redirect_to admin_add_video_path
     else
       flash[:alert] = "Video has not been created."

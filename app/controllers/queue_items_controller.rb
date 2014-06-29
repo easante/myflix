@@ -26,7 +26,7 @@ class QueueItemsController < ApplicationController
         end
       end
     rescue ActiveRecord::RecordInvalid
-      flash[:alert] = "Position has to be an integer number."
+      flash[:danger] = "Position has to be an integer number."
       redirect_to queue_items_path
       return
     end

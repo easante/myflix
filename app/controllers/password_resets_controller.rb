@@ -9,7 +9,7 @@ class PasswordResetsController < ApplicationController
       render :confirm_password_reset
       false
     else
-      flash[:error] = params[:email] ? "Email invalid." : "Email can't be blank."
+      flash[:danger] = params[:email] ? "Email invalid." : "Email can't be blank."
       redirect_to reset_password_path
     end
   end
@@ -26,7 +26,7 @@ class PasswordResetsController < ApplicationController
       @user.password = params[:user][:password]
       @user.generate_token
       @user.save
-      flash[:notice] = "Password has been changed."
+      flash[:success] = "Password has been changed."
       redirect_to sign_in_path
     else
       redirect_to expired_token_path

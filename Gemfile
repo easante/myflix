@@ -49,5 +49,7 @@ group :test do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'capybara-email', github: 'dockyard/capybara-email'
+  gem 'vcr'
+  gem 'webmock'
 end
 

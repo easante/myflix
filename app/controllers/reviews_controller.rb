@@ -5,10 +5,10 @@ class ReviewsController < ApplicationController
   def create
     @review = @video.reviews.build(review_params.merge!(user: current_user))
     if @review.save
-      flash[:notice] = "Review has been created."
+      flash[:success] = "Review has been created."
       redirect_to @video
     else
-      flash[:alert] = "Review has not been created."
+      flash[:danger] = "Review has not been created."
       render 'videos/show' 
     end
   end

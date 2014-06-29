@@ -9,10 +9,10 @@ class InvitationsController < ApplicationController
     @invitation = Invitation.new(invitation_params.merge!(inviter: current_user))
     if @invitation.save
       WelcomeMailer.send_invitation_link(@invitation).deliver 
-      flash[:notice] = "Friend's invitation has been sent."
+      flash[:success] = "Friend's invitation has been sent."
       redirect_to home_path
     else
-      flash[:alert] = "Friend's details/message can't be blank."
+      flash[:danger] = "Friend's details/message can't be blank."
       render :new
     end
   end

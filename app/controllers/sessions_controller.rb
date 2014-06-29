@@ -6,10 +6,10 @@ class SessionsController < ApplicationController
   def create
     if user = User.authenticate(params[:email], params[:password])
       session[:user_id] = user.id
-      flash[:notice] = "Sign in successful."
+      flash[:success] = "Sign in successful."
       redirect_to home_path
     else
-      flash[:alert] = "Invalid email/password combination."
+      flash[:danger] = "Invalid email/password combination."
       render :new
     end
   end

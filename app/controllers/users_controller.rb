@@ -26,17 +26,17 @@ class UsersController < ApplicationController
           :description => "Sign up charge for #{@user.email}"
         )
       rescue Stripe::CardError => e
-        flash[:alert] = e.message
+        flash[:danger] = e.message
         redirect_to new_payment_path
       end
 
       MailWorker.perform_async(@user.id)
       #WelcomeMailer.delay.notify_on_sign_up(@user)
 
-      flash[:notice] = "You have signed up successfully."
+      flash[:success] = "You have signed up successfully."
       redirect_to sign_in_path
     else
-      flash[:alert] = "Sign up unsuccessful."
+      flash[:danger] = "Sign up unsuccessful."
       render :new
     end
   end
@@ -50,7 +50,7 @@ private
     unless params[:user][:invitation_id].nil?
       @invitation = Invitation.find_by(token: params[:user][:invitation_id]) 
       if @invitation.nil?
-        flash[:notice] = "Invalid token."
+        flash[:success] = "Invalid token."
         redirect_to register_path 
         return
       end

@@ -12,7 +12,7 @@ describe PasswordResetsController do
 
       it "displays error message" do
         post :create, email: nil
-        expect(flash[:error]).to eq("Email can't be blank.")
+        expect(flash[:danger]).to eq("Email can't be blank.")
       end
     end
 
@@ -24,11 +24,11 @@ describe PasswordResetsController do
 
       it "displays error message" do
         post :create, email: "test@example.com"
-        expect(flash[:error]).to eq("Email invalid.")
+        expect(flash[:danger]).to eq("Email invalid.")
       end
     end
 
-    context "valid email address filled in"  
+    context "valid email address filled in"
       it "redirects to the reset password page" do
         post :create, email: john.email
         expect(response).to render_template :confirm_password_reset
@@ -74,7 +74,7 @@ describe PasswordResetsController do
         mary = Fabricate(:user, password: 'password')
         mary.update_column(:token, '12345')
         put :update, id: '12345', user: { password: 'password2' }
-        expect(flash[:notice]).to eq("Password has been changed.")
+        expect(flash[:success]).to eq("Password has been changed.")
       end
 
       it "regenerates the user token" do

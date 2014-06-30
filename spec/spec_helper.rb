@@ -5,6 +5,7 @@ require 'rspec/rails'
 require 'rspec/autorun'
 require 'capybara/email/rspec'
 require 'sidekiq/testing/inline'
+require 'webmock/rspec'
 require 'vcr'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
@@ -13,8 +14,11 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/cassettes'
-  c.hook_into = :webmock
+
+  c.hook_into :webmock
   c.configure_rspec_metadata!
+  c.ignore_localhost = true
+  c.allow_http_connections_when_no_cassette = true
 end
 
 # Checks for pending migrations before tests are run.

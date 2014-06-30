@@ -16,16 +16,18 @@ class UsersController < ApplicationController
     if @user.save
       @user.handle_invitation(@invitation)
 
-      Stripe.api_key = ENV['STRIPE_SECRET_KEY']
       token = params[:stripeToken]
-      begin
-        charge = Stripe::Charge.create(
-          :amount => 999,
-          :currency => "cad",
-          :card => token,
-          :description => "Sign up charge for #{@user.email}"
-        )
-      rescue Stripe::CardError => e
+
+      charge = StripeWrapper::Charge.create(
+        :amount => 999,
+        :card => token,
+        :description => "Sign up charge for #{@user.email}"
+      )
+      
+      if charge.successful?
+        flash[:success] = "Thank you for your business"
+        redirect_to new_payment_path
+      else
         flash[:danger] = e.message
         redirect_to new_payment_path
       end
@@ -43,15 +45,15 @@ class UsersController < ApplicationController
 
 private
   def user_params
-    params.require(:user).permit(:email, :password, :full_name) 
+    params.require(:user).permit(:email, :password, :full_name)
   end
 
   def verify_invitation
     unless params[:user][:invitation_id].nil?
-      @invitation = Invitation.find_by(token: params[:user][:invitation_id]) 
+      @invitation = Invitation.find_by(token: params[:user][:invitation_id])
       if @invitation.nil?
         flash[:success] = "Invalid token."
-        redirect_to register_path 
+        redirect_to register_path
         return
       end
     end

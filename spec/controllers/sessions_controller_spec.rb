@@ -31,20 +31,20 @@ describe SessionsController do
       it "redirects to home_path" do
         expect(response).to redirect_to home_path
       end
-  
+
       it "sets the flash message" do
-        expect(flash[:notice]).to eq('Sign in successful.')
+        expect(flash[:success]).to eq('Sign in successful.')
       end
 
       it "creates a session record for valid inputs" do
         expect(session[:user_id]).to eq(current_user.id)
       end
-  
+
     end
 
     context "unsuccessful sign in" do
       it "renders the sign in page" do
-        post :create, email: current_user.email, password: "mypassword" 
+        post :create, email: current_user.email, password: "mypassword"
         expect(response).to render_template :new
       end
     end

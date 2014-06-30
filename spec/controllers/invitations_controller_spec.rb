@@ -31,7 +31,7 @@ describe InvitationsController do
       it "displays error message" do
         clear_current_user
         post :create, invitation: { full_name: "John", email: "mike@example.com", message: "My test message", token:"" }
-        expect(flash[:alert]).to eq("Please sign in first!")
+        expect(flash[:danger]).to eq("Please sign in first!")
       end
     end
 
@@ -41,10 +41,10 @@ describe InvitationsController do
           post :create, invitation: { full_name: "", email: "mike@example.com", message: "My test message" }
           expect(response).to render_template :new
         end
-  
+
         it "displays error message" do
           post :create, invitation: { full_name: "", email: "mike@example.com", message: "My test message" }
-          expect(flash[:alert]).to eq("Friend's details/message can't be blank.")
+          expect(flash[:danger]).to eq("Friend's details/message can't be blank.")
         end
       end
 
@@ -53,10 +53,10 @@ describe InvitationsController do
           post :create, invitation: { full_name: "Mike", email: "", message: "My test message" }
           expect(response).to render_template :new
         end
-  
+
         it "displays error message" do
           post :create, invitation: { full_name: "Mike", email: "", message: "My test message" }
-          expect(flash[:alert]).to eq("Friend's details/message can't be blank.")
+          expect(flash[:danger]).to eq("Friend's details/message can't be blank.")
         end
       end
 
@@ -65,10 +65,10 @@ describe InvitationsController do
           post :create, invitation: { full_name: "Mike", email: "mike@example.com", message: "" }
           expect(response).to render_template :new
         end
-  
+
         it "displays error message" do
           post :create, invitation: { full_name: "Mike", email: "mike@example.com", message: "" }
-          expect(flash[:alert]).to eq("Friend's details/message can't be blank.")
+          expect(flash[:danger]).to eq("Friend's details/message can't be blank.")
         end
       end
 
@@ -77,17 +77,17 @@ describe InvitationsController do
           post :create, invitation: { full_name: "Mike", email: "mike@example.com", message: "Awesome site", token: "12345" }
           expect(Invitation.count).to eq(1)
         end
-  
+
         it "sends an email to invitee" do
           post :create, invitation: { full_name: "Mike", email: "mike@example.com", message: "Awesome site", token: "12345" }
           expect(ActionMailer::Base.deliveries.last.to).to eq(["mike@example.com"])
         end
-  
+
         it "displays a flash message to indicate success" do
           post :create, invitation: { full_name: "Mike", email: "mike@example.com", message: "Awesome site", token: "12345" }
-          expect(flash[:notice]).to eq("Friend's invitation has been sent.")
+          expect(flash[:success]).to eq("Friend's invitation has been sent.")
         end
-  
+
         it "redirects to the home page" do
           post :create, invitation: { full_name: "Mike", email: "mike@example.com", message: "Awesome site", token: "12345" }
           expect(response).to redirect_to(home_path)

@@ -10,7 +10,7 @@ feature 'Sending invitation to a friend' do
   end
 
   scenario "successfully sending invitation" do
- 
+
     visit invite_friend_path
     fill_in "Friend's Name", with: "Mike Clarke"
     fill_in "Friend's Email Address", with: "mike@example.com"
@@ -20,11 +20,16 @@ feature 'Sending invitation to a friend' do
     expect(current_path).to eq(home_path)
     open_email("mike@example.com")
     current_email.click_link("Register to use the service")
+
     fill_in "Password", with: "password"
     fill_in "Full Name", with: "Mike Clarke"
+    fill_in "Credit Card Number", with: "4242424242424242"
+    fill_in "Security Code", with: "123"
+    select '10 - October', from: "date_month"
+    select '2016', from: "date_year"
     click_button "Sign Up"
 
     expect(page).to have_content('Sign in')
     expect(current_path).to eq sign_in_path
-  end 
-end 
+  end
+end

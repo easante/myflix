@@ -14,8 +14,8 @@ Myflix::Application.routes.draw do
   get "/invite_friend", to: "invitations#new"
   get "/admin_add_video", to: "admin/videos#new"
 
-  resources :categories 
-  resources :users, only: [:new, :show, :create] 
+  resources :categories
+  resources :users, only: [:show, :create] 
   resources :friendships, only: [:create, :destroy]
   resource :session, only: [:new, :destroy]
   resources :queue_items, only: [:index, :create, :destroy]

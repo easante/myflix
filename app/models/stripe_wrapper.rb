@@ -1,4 +1,4 @@
-module StripeWrapper
+module StripeWrapper  
   class Charge
     attr_reader :response, :status
 
@@ -11,9 +11,7 @@ module StripeWrapper
       StripeWrapper.set_api_key
 
       begin
-        response = Stripe::Charge.create(amount: options[:amount],
-          currency: 'cad', card: options[:card],
-          description: options[:description])
+        response = Stripe::Charge.create(amount: options[:amount], currency: 'cad', card: options[:card], description: options[:description])
         new(response, :success)
       rescue Stripe::CardError => e
         new(e, :error)

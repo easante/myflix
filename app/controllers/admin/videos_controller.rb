@@ -1,5 +1,5 @@
 class Admin::VideosController < Admin::BaseController
-
+  
   def new
     @video = Video.new
     @categories = Category.all

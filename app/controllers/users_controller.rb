@@ -11,35 +11,36 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
+
     verify_invitation
 
     if @user.save
       @user.handle_invitation(@invitation)
 
       token = params[:stripeToken]
-
-      charge = StripeWrapper::Charge.create(
-        :amount => 999,
-        :card => token,
-        :description => "Sign up charge for #{@user.email}"
-      )
-      
+      charge = StripeWrapper::Charge.create(:amount => 999, :card => token,
+            :description => "Sign up charge for #{@user.email}")
       if charge.successful?
+        MailWorker.perform_async(@user.id)
         flash[:success] = "Thank you for your business"
-        redirect_to new_payment_path
+        redirect_to sign_in_path
       else
-        flash[:danger] = e.message
-        redirect_to new_payment_path
+        flash[:danger] = charge.error_message
+        flash[:danger] += "\n\nSign up unsuccessful."
+        redirect_to register_path
+        return
       end
 
-      MailWorker.perform_async(@user.id)
+      #MailWorker.perform_async(@user.id)
       #WelcomeMailer.delay.notify_on_sign_up(@user)
 
-      flash[:success] = "You have signed up successfully."
-      redirect_to sign_in_path
+      #flash[:success] = "You have signed up successfully."
+      #redirect_to sign_in_path
     else
       flash[:danger] = "Sign up unsuccessful."
-      render :new
+      #require 'pry'; binding.pry
+
+      render 'new'
     end
   end
 

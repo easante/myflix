@@ -51,5 +51,7 @@ group :test do
   gem 'capybara-email', github: 'dockyard/capybara-email'
   gem 'vcr'
   gem 'webmock'
+  gem 'selenium-webdriver'
+  gem 'capybara-webkit'
 end
 

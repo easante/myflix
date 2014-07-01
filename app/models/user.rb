@@ -12,9 +12,9 @@ class User < ActiveRecord::Base
   has_many :invitations, foreign_key: :inviter_id
 
   has_secure_password validations: false
-  
-  validates :full_name, presence: true  
-  validates :email, presence: true  
+
+  validates :full_name, presence: true
+  validates :email, presence: true
 
   def self.authenticate(email, password)
     user = User.find_by(email: email)
@@ -41,8 +41,9 @@ class User < ActiveRecord::Base
       self.follow(invitation.inviter)
       invitation.inviter.follow(self)
       invitation.token = nil
+      #require 'pry'; binding.pry
       invitation.save
-    end  
+    end
   end
 
   def normalize_positions

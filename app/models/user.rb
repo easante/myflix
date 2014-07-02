@@ -36,16 +36,6 @@ class User < ActiveRecord::Base
       end
   end
 
-  def handle_invitation(invitation)
-    if invitation
-      self.follow(invitation.inviter)
-      invitation.inviter.follow(self)
-      invitation.token = nil
-      #require 'pry'; binding.pry
-      invitation.save
-    end
-  end
-
   def normalize_positions
       queue_items.each_with_index do |queue_item, index|
         queue_item.update(position: index + 1)

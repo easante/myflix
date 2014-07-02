@@ -6,7 +6,7 @@ class VideosController < ApplicationController
   end
 
   def show
-    @video = Video.find params[:id]
+    @video = VideoDecorator.decorate(Video.find params[:id])
     @review = @video.reviews.build
     @reviews = @video.reviews.order('created_at DESC')
     @review_count = @video.reviews.count

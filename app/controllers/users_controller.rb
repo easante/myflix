@@ -11,35 +11,25 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-
-    verify_invitation
+    invitation_handler = InvitationHandling.new(params[:user][:invitation_id], @user)
+    if invitation_handler.invalid_invitation?
+      flash[:danger] = "Invalid token."
+      redirect_to register_path
+      return
+    end
 
     if @user.save
-      @user.handle_invitation(@invitation)
-
-      token = params[:stripeToken]
-      charge = StripeWrapper::Charge.create(:amount => 999, :card => token,
-            :description => "Sign up charge for #{@user.email}")
+      invitation_handler.handle_invitation
+      charge = CardProcessing.new(params[:stripeToken], @user, 999).charge_card
       if charge.successful?
-        MailWorker.perform_async(@user.id)
         flash[:success] = "Thank you for your business"
         redirect_to sign_in_path
       else
         flash[:danger] = charge.error_message
-        flash[:danger] += "\n\nSign up unsuccessful."
         redirect_to register_path
-        return
       end
-
-      #MailWorker.perform_async(@user.id)
-      #WelcomeMailer.delay.notify_on_sign_up(@user)
-
-      #flash[:success] = "You have signed up successfully."
-      #redirect_to sign_in_path
     else
       flash[:danger] = "Sign up unsuccessful."
-      #require 'pry'; binding.pry
-
       render 'new'
     end
   end
@@ -47,16 +37,5 @@ class UsersController < ApplicationController
 private
   def user_params
     params.require(:user).permit(:email, :password, :full_name)
-  end
-
-  def verify_invitation
-    unless params[:user][:invitation_id].nil?
-      @invitation = Invitation.find_by(token: params[:user][:invitation_id])
-      if @invitation.nil?
-        flash[:success] = "Invalid token."
-        redirect_to register_path
-        return
-      end
-    end
   end
 end

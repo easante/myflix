@@ -10,7 +10,6 @@ class UsersController < ApplicationController
   end
 
   def create
-    #raise params.inspect
     @user = User.new(user_params)
     outcome = SignUpHandling.new(@user).sign_up(params[:user][:invitation_id],
                                      params[:stripeToken])

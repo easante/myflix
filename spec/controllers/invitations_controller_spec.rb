@@ -72,9 +72,9 @@ describe InvitationsController do
         end
       end
 
-      context "successful creation of invitation" do
-        it "saves the invitation" do
-          post :create, invitation: { full_name: "Mike", email: "mike@example.com", message: "Awesome site", token: "12345" }
+        context "successful creation of invitation" do
+          it "saves the invitation" do
+            post :create, invitation: { full_name: "Mike", email: "mike@example.com", message: "Awesome site", token: "12345" }
           expect(Invitation.count).to eq(1)
         end
 

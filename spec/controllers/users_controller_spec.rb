@@ -46,56 +46,37 @@ describe UsersController do
   end
 
   describe "POST create" do
-    let(:charge) { double('charge') }
-    before do
-      charge = double('charge')
-      charge.stub(:successful?).and_return(true)
-      StripeWrapper::Charge.stub(:create).and_return(charge)
-    end
-
-    it "creates a user record for valid inputs" do
-
-      post :create, user: { full_name: 'Juliet Asiedu', email: 'juliet@example.com', password: 'password' }, charge: charge
-      expect(User.first.full_name).to eq('Juliet Asiedu')
-    end
-
-    it "redirects to the sign_in_path" do
-      post :create, user: { full_name: 'Juliet Asiedu', email: 'juliet@example.com', password: 'password' }, charge: charge
-      expect(response).to redirect_to sign_in_path
-    end
-
-    it "renders the new template when invalid user data is entered" do
-      post :create, user: { email: 'juliet@example.com', password: 'password' }, charge: charge
-      expect(response).to render_template :new
-    end
-
-    context "sending email" do
-      it "sends out email" do
-        post :create, user: { "email"=>"connie@example.com", "password"=>"password", "full_name"=>"Comfort Ohenebeng" }, charge: charge
-        expect(ActionMailer::Base.deliveries).not_to be_empty
-      end
-
-      it "sends out email to the right receipient" do
-        post :create, user: { "email"=>"connie@example.com", "password"=>"password", "full_name"=>"Comfort Ohenebeng" }, charge: charge
-        expect(ActionMailer::Base.deliveries.last.to).to eq(["connie@example.com"])
-      end
-
-      it "sends out the right email body" do
-        post :create, user: { "email"=>"connie@example.com", "password"=>"password", "full_name"=>"Comfort Ohenebeng" }, charge: charge
-        expect(ActionMailer::Base.deliveries.last.body).to include("Thank you for signing up")
-      end
-    end
-
-#    context "creating a user from invitation" do
-#      it "creates friendships from valid invitation token" do
-#        john = Fabricate(:user)
-#        invitation = Fabricate(:invitation, inviter_id: john.id, email: "mike@example.com", full_name: "Mike", message: "Message")
-#        post :create, user: { email: invitation.email, password: "password", full_name: invitation.full_name, invitation_id: invitation.id }
-#        mike = User.find_by(email: "mike@example.com")
-#        expect(mike.follows_or_same?(john)).to be_true
-#        #expect(john.follows_or_same?(mike)).to be_true
-#      end
-#    end
+  #   context "successful user sign up" do
+  #     it "redirects to the sign_in_path" do
+  #       result = double(:sign_up_result, successful?: true)
+  #       SignUpHandling.any_instance.should_receive(:sign_up).and_return(result)
+  #       post :create, user: Fabricate.attributes_for(:user)
+  #       expect(response).to redirect_to sign_in_path
+  #     end
+  #   end
+  #
+  #   context "unsuccessful user sign up" do
+  #     it "renders the new template when invalid user data is entered" do
+  #       #charge = double(:charge, successful?: false, error_message: "Your card was declined.")
+  #       result = double(:sign_up_result, successful?: false)
+  #       SignUpHandling.any_instance.should_receive(:sign_up).and_return(result)
+  #
+  #
+  #       #StripeWrapper::Charge.should_receive(:create).and_return(charge)
+  #
+  #       post :create, user: Fabricate.attributes_for(:user), stripToken: '123'
+  #       expect(response).to render_template :new
+  #     end
+  #
+  #     it "sets the flash error message" do
+  #       #charge = double(:charge, successful?: false, error_message: "Your card was declined.")
+  #       #StripeWrapper::Charge.should_receive(:create).and_return(charge)
+  #       result = double(:sign_up_result, successful?: false)
+  #       SignUpHandling.any_instance.should_receive(:sign_up).and_return(result)
+  #
+  #       post :create, user: Fabricate.attributes_for(:user), stripToken: '123'
+  #       expect(flash[:danger]).to be_present
+  #     end
+  #   end
   end
-
 end

@@ -23,7 +23,7 @@ feature 'Signing up' do
     click_button "Sign Up"
 
     expect(page).to have_content("Email Address can't be blank")
-    expect(page).to have_content("Sign up unsuccessful.")
+    expect(page).to have_content("Invalid user information.")
   end
 
   scenario "with no full name", js: true do
@@ -35,7 +35,7 @@ feature 'Signing up' do
     click_button "Sign Up"
 
     expect(page).to have_content("Full Name can't be blank")
-    expect(page).to have_content("Sign up unsuccessful.")
+    expect(page).to have_content("Invalid user information.")
   end
 
   scenario "with a declined credit card", js: true do
@@ -47,7 +47,7 @@ feature 'Signing up' do
     click_button "Sign Up"
 
     expect(page).to have_content("Your card was declined")
-    expect(page).to have_content("Sign up unsuccessful.")
+#    expect(page).to have_content("Sign up unsuccessful.")
   end
 
   scenario "with incorrect credit card number", js: true do

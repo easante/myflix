@@ -30,6 +30,11 @@ class User < ActiveRecord::Base
     friendships.create(friend: new_friend)
   end
 
+  def follows?(new_friend)
+    #require 'pry'; binding.pry
+    friendships.map(&:friend).include?(new_friend)
+  end
+
   def normalize_positions
       queue_items.each_with_index do |queue_item, index|
         queue_item.update(position: index + 1)

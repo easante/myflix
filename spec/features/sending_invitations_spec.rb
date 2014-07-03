@@ -9,7 +9,7 @@ feature 'Sending invitation to a friend' do
     sign_in_as!(john)
   end
 
-  scenario "successfully sending invitation" do
+  scenario "successfully sending invitation", js: true do
 
     visit invite_friend_path
     fill_in "Friend's Name", with: "Mike Clarke"
@@ -20,7 +20,10 @@ feature 'Sending invitation to a friend' do
     expect(current_path).to eq(home_path)
     open_email("mike@example.com")
     current_email.click_link("Register to use the service")
+    print page.body
+    save_and_open_page
 
+    fill_in "Email Address", with: "mike@example.com"
     fill_in "Password", with: "password"
     fill_in "Full Name", with: "Mike Clarke"
     fill_in "Credit Card Number", with: "4242424242424242"

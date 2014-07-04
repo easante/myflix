@@ -20,8 +20,8 @@ feature 'Sending invitation to a friend' do
     expect(current_path).to eq(home_path)
     open_email("mike@example.com")
     current_email.click_link("Register to use the service")
-    print page.body
-    save_and_open_page
+    #print page.body
+    #save_and_open_page
 
     fill_in "Email Address", with: "mike@example.com"
     fill_in "Password", with: "password"

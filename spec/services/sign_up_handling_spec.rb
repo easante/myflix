@@ -3,10 +3,10 @@ require 'spec_helper'
 describe SignUpHandling do
   describe "#sign_up" do
     context "valid user and card information" do
-      let(:charge) { double(:charge, successful?: true) }
+      let(:customer) { double(:customer, successful?: true) }
 
       before do
-        StripeWrapper::Charge.should_receive(:create).and_return(charge)
+        StripeWrapper::Customer.should_receive(:create).and_return(customer)
       end
 
       it "creates a user record for valid inputs" do
@@ -39,15 +39,16 @@ describe SignUpHandling do
       end
 
       it "sends out email for valid user input" do
-        SignUpHandling.new(Fabricate.build(:user, email: 'john@example.com')).sign_up(nil, "123")
+        john = { email: 'john@example.com', full_name: 'John Bull' }
+        SignUpHandling.new(Fabricate.build(:user, john)).sign_up(nil, "123")
         expect(ActionMailer::Base.deliveries.last.to).to eq(['john@example.com'])
       end
     end
 
     context "valid personal info and declined card" do
       it "does not create a new user record" do
-        charge = double(:charge, successful?: false, error_message: "Your card was declined.")
-        StripeWrapper::Charge.should_receive(:create).and_return(charge)
+        customer = double(:customer, successful?: false, error_message: "Your card was declined.")
+        StripeWrapper::Customer.should_receive(:create).and_return(customer)
         SignUpHandling.new(Fabricate.build(:user)).sign_up(nil, "123")
         expect(User.count).to eq(0)
       end
@@ -62,7 +63,7 @@ describe SignUpHandling do
 
       it "does not charge the card" do
         user = User.new(email: 'john@example.com')
-        StripeWrapper::Charge.should_not_receive(:create)
+        StripeWrapper::Customer.should_not_receive(:create)
         SignUpHandling.new(user).sign_up(nil, "123")
       end
 
@@ -71,8 +72,6 @@ describe SignUpHandling do
 
         user = User.new(email: 'john@example.com')
         SignUpHandling.new(user).sign_up(nil, "123")
-        #require 'pry'; binding.pry
-        #expect(ActionMailer::Base.deliveries).to be_empty
         expect(ActionMailer::Base.deliveries).to match_array([])
       end
     end

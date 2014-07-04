@@ -46,37 +46,31 @@ describe UsersController do
   end
 
   describe "POST create" do
-  #   context "successful user sign up" do
-  #     it "redirects to the sign_in_path" do
-  #       result = double(:sign_up_result, successful?: true)
-  #       SignUpHandling.any_instance.should_receive(:sign_up).and_return(result)
-  #       post :create, user: Fabricate.attributes_for(:user)
-  #       expect(response).to redirect_to sign_in_path
-  #     end
-  #   end
-  #
-  #   context "unsuccessful user sign up" do
-  #     it "renders the new template when invalid user data is entered" do
-  #       #charge = double(:charge, successful?: false, error_message: "Your card was declined.")
-  #       result = double(:sign_up_result, successful?: false)
-  #       SignUpHandling.any_instance.should_receive(:sign_up).and_return(result)
-  #
-  #
-  #       #StripeWrapper::Charge.should_receive(:create).and_return(charge)
-  #
-  #       post :create, user: Fabricate.attributes_for(:user), stripToken: '123'
-  #       expect(response).to render_template :new
-  #     end
-  #
-  #     it "sets the flash error message" do
-  #       #charge = double(:charge, successful?: false, error_message: "Your card was declined.")
-  #       #StripeWrapper::Charge.should_receive(:create).and_return(charge)
-  #       result = double(:sign_up_result, successful?: false)
-  #       SignUpHandling.any_instance.should_receive(:sign_up).and_return(result)
-  #
-  #       post :create, user: Fabricate.attributes_for(:user), stripToken: '123'
-  #       expect(flash[:danger]).to be_present
-  #     end
-  #   end
+    context "successful user sign up" do
+      it "redirects to the sign_in_path" do
+        result = double(:sign_up_result, successful?: true, invalid_invitation?: false)
+        SignUpHandling.any_instance.should_receive(:sign_up).and_return(result)
+        post :create, user: Fabricate.attributes_for(:user)
+        expect(response).to redirect_to sign_in_path
+      end
+    end
+
+    context "unsuccessful user sign up" do
+      it "renders the new template when invalid user data is entered" do
+        result = double(:sign_up_result, successful?: false, invalid_invitation?: false, error_message: "Your card was declined.")
+        SignUpHandling.any_instance.should_receive(:sign_up).and_return(result)
+
+        post :create, user: Fabricate.attributes_for(:user), stripToken: '123'
+        expect(response).to render_template :new
+      end
+
+      it "sets the flash error message" do
+        result = double(:sign_up_result, successful?: false, invalid_invitation?: true)
+        SignUpHandling.any_instance.should_receive(:sign_up).and_return(result)
+
+        post :create, user: Fabricate.attributes_for(:user), stripToken: '123'
+        expect(flash[:danger]).to be_present
+      end
+    end
   end
 end

@@ -23,13 +23,13 @@ class SignUpHandling
       self
     end
 
-    #require 'pry'; binding.pry
-
-
     if user.valid?
       token = stripe_token
-      charge = StripeWrapper::Charge.create(:amount => 999, :card => token,
-            :description => "Sign up charge for #{user.email}")
+      #charge = StripeWrapper::Charge.create(:amount => 999, :card => token,
+      #      :description => "Sign up charge for #{user.email}")
+      charge = StripeWrapper::Customer.create(:plan => "flix_plan", :card => token,
+            :email => user.email)
+
       if charge.successful?
         user.save
         handle_invitation

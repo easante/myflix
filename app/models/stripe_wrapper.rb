@@ -39,13 +39,13 @@ module StripeWrapper
       StripeWrapper.set_api_key
 
       begin
-        response = Stripe::Plan.create(
+        response = Stripe::Customer.create(
           card: options[:card],
           plan: options[:plan],
-          email: options[:email],
+          email: options[:email]
         )
         new(response, :success)
-      rescue Stripe::StripeError => e
+      rescue Stripe::CardError => e
         new(e, :error)
       end
     end

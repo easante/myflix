@@ -11,8 +11,7 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    outcome = SignUpHandling.new(@user).sign_up(params[:user][:invitation_id],
-                                     params[:stripeToken])
+    outcome = SignUpHandling.new(@user).sign_up(params[:user][:invitation_id], params[:stripeToken])
     if outcome.invalid_invitation?
       flash[:danger] = "Invalid token."
       redirect_to register_path

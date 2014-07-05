@@ -27,8 +27,7 @@ class SignUpHandling
       token = stripe_token
       #charge = StripeWrapper::Charge.create(:amount => 999, :card => token,
       #      :description => "Sign up charge for #{user.email}")
-      customer = StripeWrapper::Customer.create(:card => token,
-            :email => user.email)
+      customer = StripeWrapper::Customer.create(:card => token, :email => user.email)
 
       if customer.successful?
         user.customer_token = customer.customer_token

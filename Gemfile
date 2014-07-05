@@ -25,6 +25,7 @@ gem 'mini_magick'
 gem 'stripe'
 gem 'figaro'
 gem 'draper'
+gem 'stripe_event'
 
 group :development do
   gem 'sqlite3'
@@ -55,4 +56,3 @@ group :test do
   gem 'selenium-webdriver'
   gem 'capybara-webkit'
 end
-

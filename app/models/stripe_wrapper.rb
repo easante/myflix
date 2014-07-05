@@ -54,6 +54,10 @@ module StripeWrapper
       status == :success
     end
 
+    def customer_token
+      response.id
+    end
+
     def error_message
       response.message
     end

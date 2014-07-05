@@ -13,9 +13,10 @@ Myflix::Application.routes.draw do
   get "/expired_token", to: "password_resets#expired_token"
   get "/invite_friend", to: "invitations#new"
   get "/admin_add_video", to: "admin/videos#new"
+  mount StripeEvent::Engine => '/stripe_events'
 
   resources :categories
-  resources :users, only: [:show, :create] 
+  resources :users, only: [:show, :create]
   resources :friendships, only: [:create, :destroy]
   resource :session, only: [:new, :destroy]
   resources :queue_items, only: [:index, :create, :destroy]

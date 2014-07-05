@@ -65,10 +65,24 @@ describe StripeWrapper do
         expect(subscription).not_to be_successful
       end
 
+      it "returns the customer token for a valid card" do
+        john = Fabricate(:user)
+        subscription = StripeWrapper::Customer.create(plan: "flix_plan", card: valid_token, email: john.email)
+        expect(subscription.customer_token).to be_present
+
+      end
+
       it "returns an error message for a declined card" do
         john = Fabricate(:user, email: 'john@email.com')
         subscription = StripeWrapper::Customer.create(plan: "flix_plan", card: declined_token, email: john.email)
         expect(subscription.error_message).to eq('Your card was declined.')
+      end
+
+      it "returns the customer token for a valid card" do
+        john = Fabricate(:user, email: 'john@email.com')
+        subscription = StripeWrapper::Customer.create(plan: "flix_plan", card: valid_token, email: john.email)
+        expect(subscription.customer_token).to be_present
+
       end
     end
   end

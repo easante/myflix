@@ -68,14 +68,14 @@ http_interactions:
             "exp_year": 2016,
             "fingerprint": "LdQx4SlIvRodhqeR",
             "country": "US",
-            "name": null,
-            "address_line1": null,
-            "address_line2": null,
-            "address_city": null,
-            "address_state": null,
-            "address_zip": null,
-            "address_country": null,
-            "customer": null
+            "name": nil,
+            "address_line1": nil,
+            "address_line2": nil,
+            "address_city": nil,
+            "address_state": nil,
+            "address_zip": nil,
+            "address_country": nil,
+            "customer": nil
           }
         }
     http_version: 

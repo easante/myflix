@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SignUpHandling do
   describe "#sign_up" do
     context "valid user and card information" do
-      let(:customer) { double(:customer, successful?: true) }
+      let(:customer) { double(:customer, successful?: true, customer_token: '2345') }
 
       before do
         StripeWrapper::Customer.should_receive(:create).and_return(customer)
@@ -12,6 +12,11 @@ describe SignUpHandling do
       it "creates a user record for valid inputs" do
         SignUpHandling.new(Fabricate.build(:user)).sign_up(nil, "123")
         expect(User.count).to eq(1)
+      end
+
+      it "stores the customer token from stripe" do
+        SignUpHandling.new(Fabricate.build(:user)).sign_up(nil, "123")
+        expect(User.last.customer_token).to eq('2345')
       end
 
       it "makes the user follow the inviter" do

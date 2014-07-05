@@ -27,10 +27,11 @@ class SignUpHandling
       token = stripe_token
       #charge = StripeWrapper::Charge.create(:amount => 999, :card => token,
       #      :description => "Sign up charge for #{user.email}")
-      charge = StripeWrapper::Customer.create(:plan => "flix_plan", :card => token,
+      customer = StripeWrapper::Customer.create(:card => token,
             :email => user.email)
 
-      if charge.successful?
+      if customer.successful?
+        user.customer_token = customer.customer_token
         user.save
         handle_invitation
         MailWorker.perform_async(user.id)
@@ -38,7 +39,7 @@ class SignUpHandling
         self
       else
         @status = :failure
-        @error_message = charge.error_message
+        @error_message = customer.error_message
         self
       end
     else

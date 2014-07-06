@@ -44,4 +44,12 @@ describe User do
       expect(john.token).to be_present
     end
   end
+
+  describe "#lockout!" do
+    it "locks out an active user for declined payment" do
+      john = Fabricate(:user)
+      john.lockout!
+      expect(john.reload).not_to be_active
+    end
+  end
 end

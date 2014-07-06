@@ -41,10 +41,7 @@ class User < ActiveRecord::Base
       end
   end
 
-  def normalize_positions
-      queue_items.each_with_index do |queue_item, index|
-        queue_item.update(position: index + 1)
-      end
+  def lockout!
+    update!(active: false)
   end
-
 end

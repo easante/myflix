@@ -10,4 +10,10 @@ StripeEvent.configure do |events|
 
     Payment.create!(user: user, amount: amount, reference_id: reference_id)
   end
+
+  events.subscribe 'charge.failed' do |event|
+    user = User.find_by(customer_token: event.data.object.customer)
+    user.lockout!
+  end
+
 end

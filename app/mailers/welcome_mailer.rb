@@ -22,4 +22,12 @@ class WelcomeMailer < ActionMailer::Base
            to: invitation.email,
       subject: 'Invitation to sign up'
   end
+
+  def send_lockout_notice(user)
+    @user = user
+
+    mail from: 'Emmanuel Asante <esante2011@gmail.com>',
+           to: user.email,
+      subject: 'Account Suspension'
+  end
 end

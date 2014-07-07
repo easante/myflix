@@ -25,28 +25,6 @@ class UsersController < ApplicationController
       flash[:danger] = outcome.error_message
       render :new
     end
-
-    # invitation_handler = InvitationHandling.new(params[:user][:invitation_id], @user)
-    # if invitation_handler.invalid_invitation?
-    #   flash[:danger] = "Invalid token."
-    #   redirect_to register_path
-    #   return
-    # end
-    #
-    # if @user.save
-    #   invitation_handler.handle_invitation
-    #   charge = CardProcessing.new(params[:stripeToken], @user, 999).charge_card
-    #   if charge.successful?
-    #     flash[:success] = "Thank you for your business"
-    #     redirect_to sign_in_path
-    #   else
-    #     flash[:danger] = charge.error_message
-    #     redirect_to register_path
-    #   end
-    # else
-    #   flash[:danger] = "Sign up unsuccessful."
-    #   render 'new'
-    # end
   end
 
 private

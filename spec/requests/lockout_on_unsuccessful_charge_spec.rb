@@ -73,4 +73,10 @@ describe "Lock subscriber out on unsuccessful charge" do
     expect(john.reload).not_to be_active
   end
 
+  it "it sends notification email to subscriber" do
+    john = Fabricate(:user, customer_token: "cus_4Lfjy5EmkkvgLZ")
+
+    post "/stripe_events", event_data
+    expect(ActionMailer::Base.deliveries.last.to).to eq([john.email])
+  end
 end

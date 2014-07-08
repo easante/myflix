@@ -5,39 +5,38 @@
         = bootstrap_form_for [:admin, @video], html: { multipart: true, class: 'form-horizontal' } do |f|
           %ul.nav.nav-tabs
             %li
-              %a(href="/admin_views_payments") Recent Payments
+              = link_to 'Recent Payments', admin_views_payments_path
             %li.active
-              %a(href="/admin_add_video") Add a New Video
+              = link_to 'Add a New Video', admin_add_video_path
           %br
-          %fieldset
-            .form-group
-              %label.control-label.col-sm-3 Title
-              .col-sm-3
-                = f.text_field :title, hide_label: true, class: 'form-control'
-            .form-group
-              %label.control-label.col-sm-3 Category
-              .col-sm-3
-                = f.select :category_id, @categories.map { |s| [s.name, s.id] }, hide_label: true, class: 'form-control'
-            .form-group
-              %label.control-label.col-sm-3 Description
-              .col-sm-6
-                = f.text_area :description, class: 'form-control', hide_label: true, rows: 6
-            .form-group
-              %label.control-label.col-sm-3 Large cover
-              .col-sm-3
-                %col.btn.btn-file
-                  = f.file_field :large_cover, class: 'form-control', hide_label: true
-            .form-group
-              %label.control-label.col-sm-3 Small cover
-              .col-sm-3
-                %col.btn.btn-file
-                  = f.file_field :small_cover, class: 'form-control', hide_label: true
-            .form-group
-              %label.control-label.col-sm-3 Video Url
-              .col-sm-3
-                %col.btn.btn-file
-                  = f.text_field :video_url, class: 'form-control', hide_label: true
+          .form-group
+            %label.control-label.col-sm-3 Title
+            .col-sm-3
+              = f.text_field :title, hide_label: true, class: 'form-control'
+          .form-group
+            %label.control-label.col-sm-3 Category
+            .col-sm-3
+              = f.select :category_id, @categories.map { |s| [s.name, s.id] }, hide_label: true, class: 'form-control'
+          .form-group
+            %label.control-label.col-sm-3 Description
+            .col-sm-6
+              = f.text_area :description, class: 'form-control', hide_label: true, rows: 6
+          .form-group
+            %label.control-label.col-sm-3 Large cover
+            .col-sm-3
+              %col.btn.btn-file
+                = f.file_field :large_cover, class: 'form-control', hide_label: true
+          .form-group
+            %label.control-label.col-sm-3 Small cover
+            .col-sm-3
+              %col.btn.btn-file
+                = f.file_field :small_cover, class: 'form-control', hide_label: true
+          .form-group
+            %label.control-label.col-sm-3 Video Url
+            .col-sm-3
+              %col.btn.btn-file
+                = f.text_field :video_url, class: 'form-control', hide_label: true
 
-          %fieldset.actions.control-group
-            .col-sm-6.col-md-offset-3
+          .form-group.actions.control-group
+            .col-sm-offset-3
               = f.submit "Add Video", class: "btn btn-default"
